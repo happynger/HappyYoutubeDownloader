@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeExplode;
+using YoutubeExplode.Converter;
 using YoutubeExplode.Models;
 using YoutubeExplode.Models.MediaStreams;
 
@@ -12,7 +13,8 @@ namespace Youtube_Downloader
 	{
 		private static string _id;
 
-		private static readonly YoutubeClient Client = new YoutubeClient();
+		private static readonly YoutubeClient    Client    = new YoutubeClient();
+		private static readonly YoutubeConverter Converter = new YoutubeConverter(Client);
 
 		public static bool Parse(string link)
 		{
@@ -34,25 +36,25 @@ namespace Youtube_Downloader
 			return video.Thumbnails.MediumResUrl;
 		}
 
-		public static async Task DownloadVideoAsync(string downloadPath, object completedLabel)
+		public static async Task DownloadVideoAsync(string            downloadPath,
+													object            completedLabel,
+													IProgress<double> progress = null)
 		{
-			MediaStreamInfoSet streamInfoSet = await Client.GetVideoMediaStreamInfosAsync(_id);
-			MuxedStreamInfo    streamInfo    = streamInfoSet.Muxed.WithHighestVideoQuality();
-
-			await Download(streamInfo, downloadPath, VideoType.Muxed);
+			await Download("mp4", downloadPath, "Video", progress);
 			MainWindow.OnComplete(completedLabel);
 		}
 
-		public static async Task DownloadAudioAsync(string downloadPath, object completedLabel)
+		public static async Task DownloadAudioAsync(string            downloadPath,
+													object            completedLabel,
+													IProgress<double> progress = null)
 		{
-			MediaStreamInfoSet streamInfoSet = await Client.GetVideoMediaStreamInfosAsync(_id);
-			AudioStreamInfo    streamInfo    = streamInfoSet.Audio.WithHighestBitrate();
-
-			await Download(streamInfo, downloadPath, VideoType.Audio);
+			await Download("mp3", downloadPath, "Audio", progress);
 			MainWindow.OnComplete(completedLabel);
 		}
 
-		public static async Task DownloadMuteVideoAsync(string downloadPath, object completedLabel)
+		public static async Task DownloadMuteVideoAsync(string            downloadPath,
+														object            completedLabel,
+														IProgress<double> progress = null)
 		{
 			MediaStreamInfoSet streamInfoSet = await Client.GetVideoMediaStreamInfosAsync(_id);
 
@@ -62,18 +64,27 @@ namespace Youtube_Downloader
 													  .ThenByDescending(s => s.Framerate)
 													  .First();
 
-			await Download(streamInfo, downloadPath, VideoType.MuteVideo);
+			await Download(streamInfo, downloadPath, VideoType.MuteVideo, progress);
 			MainWindow.OnComplete(completedLabel);
 		}
 
-		private static async Task Download(MediaStreamInfo streamInfo, string downloadPath, VideoType type)
+		private static async Task Download(MediaStreamInfo   streamInfo,
+										   string            downloadPath,
+										   VideoType         type,
+										   IProgress<double> progress = null)
 		{
 			var ext  = streamInfo.Container.GetFileExtension();
 			var path = Path.Combine(downloadPath, $"{_id}_{type}.{ext}");
 
-			await Client.DownloadMediaStreamAsync(streamInfo, path);
+			await Client.DownloadMediaStreamAsync(streamInfo, path, progress);
 		}
 
-		private enum VideoType { Audio, MuteVideo, Muxed }
+		private static async Task Download(string            extenstion,
+										   string            downloadPath,
+										   string            type     = "Video",
+										   IProgress<double> progress = null) =>
+			await Converter.DownloadVideoAsync(_id, Path.Combine(downloadPath, $"{_id}_{type}.{extenstion}"), progress);
+
+		private enum VideoType { MuteVideo }
 	}
 }

@@ -35,8 +35,12 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="LtGt, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\packages\LtGt.1.0.1\lib\net45\LtGt.dll</HintPath>
+        <Reference Include="CliWrap, Version=2.3.1.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\CliWrap.2.3.1\lib\net45\CliWrap.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="LtGt, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\LtGt.1.0.2\lib\net45\LtGt.dll</HintPath>
             <Private>True</Private>
         </Reference>
         <Reference Include="MaterialDesignColors, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
@@ -49,11 +53,7 @@
         </Reference>
         <Reference Include="Microsoft.CSharp"/>
         <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-            <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-            <Private>True</Private>
-        </Reference>
-        <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
-            <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+            <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
             <Private>True</Private>
         </Reference>
         <Reference Include="ShowMeTheXAML, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -62,6 +62,10 @@
         </Reference>
         <Reference Include="Sprache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\packages\Sprache.2.2.0\lib\net45\Sprache.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Syroot.KnownFolders, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\Syroot.Windows.IO.KnownFolders.1.2.1\lib\net452\Syroot.KnownFolders.dll</HintPath>
             <Private>True</Private>
         </Reference>
         <Reference Include="System"/>
@@ -76,8 +80,12 @@
         <Reference Include="WindowsBase"/>
         <Reference Include="PresentationCore"/>
         <Reference Include="PresentationFramework"/>
-        <Reference Include="YoutubeExplode, Version=4.7.10.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\packages\YoutubeExplode.4.7.10\lib\net45\YoutubeExplode.dll</HintPath>
+        <Reference Include="YoutubeExplode, Version=4.7.11.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\YoutubeExplode.4.7.11\lib\net45\YoutubeExplode.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="YoutubeExplode.Converter, Version=1.4.3.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\YoutubeExplode.Converter.1.4.3\lib\net45\YoutubeExplode.Converter.dll</HintPath>
             <Private>True</Private>
         </Reference>
     </ItemGroup>
@@ -86,6 +94,7 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="WindowStyle.xaml.cs"/>
         <Compile Include="YoutubeHandler.cs"/>
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
@@ -99,6 +108,7 @@
             <DependentUpon>MainWindow.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Page Include="WindowStyle.xaml"/>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">
@@ -117,6 +127,9 @@
     <ItemGroup>
         <None Include="App.config"/>
         <None Include="packages.config"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="DownloadFFmpeg.ps1"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <Import Project="..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets')"/>

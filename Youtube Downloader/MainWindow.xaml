@@ -5,14 +5,19 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:Youtube_Downloader"
 		mc:Ignorable="d"
-		Title="MainWindow"
+		Title="Downloader"
 		Height="600"
 		Width="800"
+		MinWidth="600"
+		MinHeight="400"
+		WindowStartupLocation="CenterScreen"
 		Background="{DynamicResource MaterialDesignPaper}"
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}"
 		TextElement.FontWeight="Medium"
 		TextElement.FontSize="18"
-		FontFamily="{DynamicResource MaterialDesignFont}" >
+		FontFamily="{DynamicResource MaterialDesignFont}"
+		Style="{StaticResource CustomWindowStyle}" >
+
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="50" />
@@ -26,12 +31,14 @@
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 
+		<!--URL LABEL-->
 		<Label Grid.Column="0"
 			   Grid.Row="0"
-			   Margin="10 10 3 0"
+			   Margin="10 0 3 0"
 			   VerticalAlignment="Center" >
 			URL:
 		</Label>
+		<!--URL INPUT BOX-->
 		<TextBox Grid.Column="1"
 				 Grid.Row="0"
 				 Grid.ColumnSpan="2"
@@ -39,60 +46,81 @@
 				 TextAlignment="Justify"
 				 VerticalAlignment="Center"
 				 TextChanged="UrlBoxChanged" />
+		<!--SAVE PATH LABEL-->
 		<Label Grid.Column="0"
 			   Grid.Row="1"
-			   Margin="10 10 3 0"
+			   Margin="10 0 3 0"
 			   VerticalAlignment="Center" >
 			Save Path:
 		</Label>
+		<!--SAVE PATH-->
 		<TextBlock Grid.Column="1"
 				   Grid.Row="1"
 				   x:Name="TextBlock"
 				   TextAlignment="Justify"
 				   VerticalAlignment="Center"
 				   TextWrapping="NoWrap" />
+		<!--SAVE PATH BUTTON-->
 		<Button Grid.Column="2"
 				Grid.Row="1"
 				Click="BrowseButtonClick"
 				Margin="10 0 10 0" >
 			Browse
 		</Button>
+		<!--THUMBNAIL-->
 		<Image Grid.Row="2"
 			   Grid.Column="0"
 			   Grid.ColumnSpan="2"
 			   Margin="10"
 			   x:Name="Preview" />
+		<!--DOWNLOAD BUTTONS-->
 		<Grid Grid.Column="2"
 			  Grid.Row="2"
-			  Grid.RowSpan="2"
-			  >
+			  Grid.RowSpan="2" >
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*" />
 				<RowDefinition Height="*" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 			<Button Click="DownloadVideoButtonClick"
-					Margin="10 0 10 0" >
+					Margin="10 5 10 5"
+					Height="Auto"
+					MaxHeight="100" >
 				Download Video
 			</Button>
 			<Button Grid.Row="1"
 					Click="DownloadAudioButtonClick"
-					Margin="10 0 10 0" >
+					Margin="10 5 10 5"
+					Height="Auto"
+					MaxHeight="100" >
 				Download Audio
 			</Button>
 			<Button Grid.Row="2"
 					Click="DownloadSilentVideoButtonClick"
-					Margin="10 0 10 0" >
+					Margin="10 5 10 5"
+					Height="Auto"
+					MaxHeight="100" >
 				Download Silent Video
 			</Button>
 		</Grid>
-		<TextBlock Grid.Row="3"
-				   Grid.Column="0"
-				   Grid.ColumnSpan="3"
-				   x:Name="Completed"
-				   TextAlignment="Center"
-				   VerticalAlignment="Center"
-				   Margin="10 0 10 0"
-				   Foreground="LawnGreen" />
+		<StackPanel Grid.Row="3"
+					Grid.Column="0"
+					Grid.ColumnSpan="2"
+					Orientation="Vertical" >
+			<!--COMPLETED LABEL-->
+			<TextBlock x:Name="Completed"
+					   TextAlignment="Center"
+					   VerticalAlignment="Center"
+					   Margin="10 0 10 0"
+					   Foreground="LawnGreen" />
+			<!--COMPLETION BAR-->
+			<ProgressBar Value="0"
+						 x:Name="ProgressBar"
+						 Background="LawnGreen"
+						 Maximum="1"
+						 Margin="10, 5, 10, 0"
+						 MinHeight="10"
+						 ToolTip="Progress" />
+		</StackPanel>
 	</Grid>
 </Window>
