@@ -3,26 +3,22 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shell;
 using Syroot.Windows.IO;
 using static System.Windows.Forms.DialogResult;
-using Application = System.Windows.Application;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace Youtube_Downloader
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	///     Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow
 	{
-		private string _folderPath;
-		private bool   _canDownload;
-		private bool   _inCorrectId;
-
 		private readonly Progress<double> _progress;
+		private          bool             _canDownload;
+		private          string           _folderPath;
+		private          bool             _inCorrectId;
 
 		public MainWindow()
 		{
