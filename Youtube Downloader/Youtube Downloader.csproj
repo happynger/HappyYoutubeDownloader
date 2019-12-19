@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DownloadFFmpeg.ps1" />
+    <Content Include="README.md" />
     <Content Include="ReleaseInfo.json" />
     <Content Include="UpdateRelease.ps1" />
   </ItemGroup>
