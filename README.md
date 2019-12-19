@@ -1,4 +1,4 @@
-#Happy Youtube Downloader
+# Happy Youtube Downloader
 
 Happy youtube downloader is the my implementation of the Youtube Downloader \
 This is just quick implementation of the downloader from the web
