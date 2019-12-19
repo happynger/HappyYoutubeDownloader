@@ -4,3 +4,5 @@ obj/
 .idea/
 
 Youtube Downloader.sln.DotSettings.user
+
+Youtube Downloader/UpdateRelease.ps1
