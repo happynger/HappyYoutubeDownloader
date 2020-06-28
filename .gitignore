@@ -2,6 +2,9 @@ bin/
 obj/
 /packages/
 .idea/
+.vs/
+
+Youtube Downloader/testing.ps1
 
 Youtube Downloader.sln.DotSettings.user
 

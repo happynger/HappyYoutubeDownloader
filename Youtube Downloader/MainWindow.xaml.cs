@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using Syroot.Windows.IO;
+using YoutubeExplode;
 using static System.Windows.Forms.DialogResult;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -15,73 +16,87 @@ namespace Youtube_Downloader
 	/// </summary>
 	public partial class MainWindow
 	{
-		private readonly Progress<double> _progress;
-		private          bool             _canDownload;
-		private          string           _folderPath;
-		private          bool             _inCorrectId;
+		private readonly Progress<double> progress;
+		private          bool             canDownload;
+		private          string           folderPath;
+		private          bool             isCorrectId;
 
-		public MainWindow()
+		public static MainWindow? instance;
+
+		public MainWindow( )
 		{
 			InitializeComponent();
-			_progress                 =  new Progress<double>();
-			_progress.ProgressChanged += (sender, d) => UpdateProgress(d);
-			_folderPath               =  new KnownFolder(KnownFolderType.Downloads).Path;
-			TextBlock.Text            =  _folderPath;
+			progress                 =  new Progress<double>();
+			progress.ProgressChanged += ( sender, d ) => UpdateProgress(d);
+			folderPath               =  new KnownFolder(KnownFolderType.Downloads).Path;
+			TextBlock.Text           =  folderPath;
+			instance                 =  this;
 		}
 
-		private void BrowseButtonClick(object sender, RoutedEventArgs e)
+		private void BrowseButtonClick( object sender, RoutedEventArgs e )
 		{
 			var folderBrowserDialog = new FolderBrowserDialog();
-			if (folderBrowserDialog.ShowDialog() != OK)
-				return;
+			if (folderBrowserDialog.ShowDialog() != OK) return;
 
-			_folderPath    = folderBrowserDialog.SelectedPath;
-			TextBlock.Text = _folderPath;
+			folderPath     = folderBrowserDialog.SelectedPath;
+			TextBlock.Text = folderPath;
 		}
 
-		public static void OnComplete(object sender)
+		public static void OnComplete( object sender )
 		{
-			if (sender is TextBlock text)
-				text.Text = "Completed";
+			if (sender is TextBlock text) text.Text = "Completed";
 		}
 
-		private void UpdateProgress(double value) => ProgressBar.Value = value;
-
-		private async void UrlBoxChanged(object sender, TextChangedEventArgs e)
+		public static void OnReset( object sender )
 		{
-			_canDownload      = false;
+			if (sender is TextBlock text) text.Text = "";
+		}
+
+		public void ChangePreview( string url )
+		{
+			Preview.Source = new BitmapImage(new Uri(url));
+		}
+
+		private void UpdateProgress( double value ) => ProgressBar.Value = value;
+
+		private async void UrlBoxChanged( object sender, TextChangedEventArgs e )
+		{
+			canDownload       = false;
 			Completed.Text    = "";
 			ProgressBar.Value = 0;
 
-			if (!(sender is TextBox textBox) || (_inCorrectId = !YoutubeHandler.Parse(textBox.Text)))
-				return;
+			if (!(sender is TextBox textBox) || (isCorrectId = !await YoutubeHandler.ParseAsync(textBox.Text))) return;
 
-			Preview.Source = new BitmapImage(new Uri(await YoutubeHandler.GetThumbnailUrlAsync()));
-			_canDownload   = true;
+			ChangePreview(await YoutubeHandler.GetThumbnailUrlAsync());
+			canDownload = true;
 		}
 
-		private async void DownloadVideoButtonClick(object sender, RoutedEventArgs e)
+		private async void DownloadVideoButtonClick( object sender, RoutedEventArgs e )
 		{
-			if (!_canDownload || !Directory.Exists(_folderPath) || _inCorrectId)
-				return;
+			if (!canDownload || !Directory.Exists(folderPath) || isCorrectId) return;
 
-			await YoutubeHandler.DownloadVideoAsync(_folderPath, Completed, _progress);
+			await YoutubeHandler.DownloadVideoAsync(folderPath, Completed, progress);
 		}
 
-		private async void DownloadAudioButtonClick(object sender, RoutedEventArgs e)
+		private async void DownloadAudioButtonClick( object sender, RoutedEventArgs e )
 		{
-			if (!_canDownload || !Directory.Exists(_folderPath) || _inCorrectId)
-				return;
+			if (!canDownload || !Directory.Exists(folderPath) || isCorrectId) return;
 
-			await YoutubeHandler.DownloadAudioAsync(_folderPath, Completed, _progress);
+			await YoutubeHandler.DownloadAudioAsync(folderPath, Completed, progress);
 		}
 
-		private async void DownloadSilentVideoButtonClick(object sender, RoutedEventArgs e)
+		private async void DownloadSilentVideoButtonClick( object sender, RoutedEventArgs e )
 		{
-			if (!_canDownload || !Directory.Exists(_folderPath) || _inCorrectId)
-				return;
+			if (!canDownload || !Directory.Exists(folderPath) || isCorrectId) return;
 
-			await YoutubeHandler.DownloadMuteVideoAsync(_folderPath, Completed, _progress);
+			await YoutubeHandler.DownloadMuteVideoAsync(folderPath, Completed, progress);
+		}
+
+		private async void DownloadPlaylistButtonClick( object sender, RoutedEventArgs e )
+		{
+			if (!canDownload || !Directory.Exists(folderPath) || isCorrectId) return;
+
+			await YoutubeHandler.DownloadPlaylistAsync(folderPath, Completed, progress);
 		}
 	}
 }

@@ -20,7 +20,7 @@
 									 EndPoint="1, 1" >
 					<GradientStop Color="{DynamicResource Primary900}"
 								  Offset="0.0" />
-					<GradientStop Color="{DynamicResource Primary900Foreground}"
+					<GradientStop Color="{DynamicResource Accent400}"
 								  Offset="1.0" />
 				</LinearGradientBrush>
 			</Setter.Value>
